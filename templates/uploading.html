@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>TikTok Uploader</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1, h2 {
+      text-align: center;
+    }
+
+    .loading-container {
+      text-align: center;
+      margin-top: 50px;
+    }
+
+    .loading-icon {
+      display: inline-block;
+      width: 50px;
+      height: 50px;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #3498db;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+    <script>
+        function navigate() {
+            window.location.href = 'transcribing_video';  // Redirects user to the /map route when 'create_map' is finished
+        }
+        fetch('upload').then(navigate); // Performing 'create_map' and then calls navigate() function, declared above
+    </script>
+</head>
+<body>
+  <h1>TikTok Uploader</h1>
+  <h2>{{ number_video }} / {{ total_number }}</h2>
+  <div class="loading-container">
+    <div class="loading-icon"></div>
+    <p>Uploading TikTok to Google Cloud...</p>
+  </div>
+</body>
+</html>
