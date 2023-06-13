@@ -13,7 +13,7 @@ class GoogleStorage:
         """Uploads a file to the bucket."""
         bucket = self.storage_client.bucket(self.bucket_name)
         blob = bucket.blob(destination_blob_name)
-        blob.upload_from_filename(source_file_name)
+        blob.upload_from_filename(source_file_name, timeout=300)
         print("File {} uploaded to {}.".format(source_file_name, destination_blob_name))
 
     def get_gs_url(self, destination_blob_name):

@@ -40,17 +40,16 @@
   </style>
     <script>
         function navigate() {
-            window.location.href = 'transcribing_video';  // Redirects user to the /map route when 'create_map' is finished
+            window.location.href = 'uploading_video';  // Redirects user to the /map route when 'create_map' is finished
         }
-        fetch('upload').then(navigate); // Performing 'create_map' and then calls navigate() function, declared above
+        fetch('search').then(navigate); // Performing 'create_map' and then calls navigate() function, declared above
     </script>
 </head>
 <body>
-  <h1>TikTok Uploader</h1>
-  <h2>{{ number_video + 1 }} / {{ total_number }}</h2>
+  <h1>TikTok Searcher</h1>
   <div class="loading-container">
     <div class="loading-icon"></div>
-    <p>Uploading TikTok to Google Cloud...</p>
+    <p>Searching videos...</p>
   </div>
 </body>
 </html>

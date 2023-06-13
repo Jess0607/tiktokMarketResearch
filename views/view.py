@@ -14,5 +14,12 @@ class View:
         return render_template('transcribing.html', number_video=number_video, total_number=total_number,
                                length_dictionary=length_dictionary)
 
-    def render_finished(self):
-        return render_template('finished.html')
+    def render_finished(self, total_number):
+        return render_template('finished.html', total_number=total_number)
+
+    def render_searching(self, number_video, total_number):
+        return render_template('searching.html', number_video=number_video, total_number=total_number)
+
+    def render_topics(self, number_video, total_number, length_dictionary):
+        return render_template('gettopics.html', number_video=number_video, total_number=total_number,
+                               length_dictionary=length_dictionary)

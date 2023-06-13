@@ -1,7 +1,9 @@
 # Importing the necessary modules and libraries
 from flask import Flask
 from flask_migrate import Migrate
-from routes.mainblueprint import blueprint
+from routes.mainblueprint import blueprint as blueprint
+from routes.homepageblueprint import blueprint as homepage_blueprint
+from routes.dashboardblueprint import blueprint as dashboard_blueprint
 from models.mysqlmodel import db
 
 
@@ -15,7 +17,10 @@ def create_app():
 
 app = create_app()  # Creating the app
 # Registering the blueprint
-app.register_blueprint(blueprint, url_prefix='/')
+app.register_blueprint(homepage_blueprint, url_prefix='/', name='homepage')
+app.register_blueprint(blueprint, url_prefix='/looker')
+app.register_blueprint(dashboard_blueprint, url_prefix='/dashboard', name='dashboard')
+
 migrate = Migrate(app, db)  # Initializing the migration
 
 

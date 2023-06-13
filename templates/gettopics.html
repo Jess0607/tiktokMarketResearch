@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>TikTok Uploader</title>
+  <title>TikTok Topic Getter</title>
 
   <style>
     body {
@@ -38,19 +38,25 @@
       }
     }
   </style>
-    <script>
-        function navigate() {
-            window.location.href = 'transcribing_video';  // Redirects user to the /map route when 'create_map' is finished
-        }
-        fetch('upload').then(navigate); // Performing 'create_map' and then calls navigate() function, declared above
-    </script>
+  <script>
+      {% if length_dictionary > 1 %}
+            function navigate() {
+              window.location.href = 'uploading_video';  // Redirects user to the 'transcribing_video' page when transcribing is finished
+            }
+        {% else %}
+            function navigate() {
+              window.location.href = 'finished';  // Redirects user to the 'transcribing_video' page when transcribing is finished
+            }
+        {% endif %}
+    fetch('topics').then(navigate); // Initiating the transcribing process and then calls navigate() function, declared above
+  </script>
 </head>
 <body>
-  <h1>TikTok Uploader</h1>
-  <h2>{{ number_video + 1 }} / {{ total_number }}</h2>
+  <h1>TikTok Topic Getter</h1>
+  <h2>{{ number_video }} / {{ total_number }}</h2>
   <div class="loading-container">
     <div class="loading-icon"></div>
-    <p>Uploading TikTok to Google Cloud...</p>
+    <p>Getting Topics...</p>
   </div>
 </body>
 </html>

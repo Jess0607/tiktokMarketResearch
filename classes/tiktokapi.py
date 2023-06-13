@@ -5,6 +5,7 @@ import urllib.request
 from classes.googlestorage import GoogleStorage
 from classes.googletranscribe import GoogleTranscribe
 from cleantext import clean
+import re
 
 load_dotenv()
 
@@ -21,6 +22,31 @@ class TikTok:
         self.next_video_id = None
         self.number_video = 0
         self.total_number = 0
+        self.to_process = 0
+        self.current_cursor = 0
+
+    def remove_emojis(self, data):
+        emoj = re.compile("["
+                          u"\U0001F600-\U0001F64F"  # emoticons
+                          u"\U0001F300-\U0001F5FF"  # symbols & pictographs
+                          u"\U0001F680-\U0001F6FF"  # transport & map symbols
+                          u"\U0001F1E0-\U0001F1FF"  # flags (iOS)
+                          u"\U00002500-\U00002BEF"  # chinese char
+                          u"\U00002702-\U000027B0"
+                          u"\U00002702-\U000027B0"
+                          u"\U000024C2-\U0001F251"
+                          u"\U0001f926-\U0001f937"
+                          u"\U00010000-\U0010ffff"
+                          u"\u2640-\u2642"
+                          u"\u2600-\u2B55"
+                          u"\u200d"
+                          u"\u23cf"
+                          u"\u23e9"
+                          u"\u231a"
+                          u"\ufe0f"  # dingbats
+                          u"\u3030"
+                          "]+", re.UNICODE)
+        return re.sub(emoj, '', data)
 
     def search(self, keyword, count=10, cursor=0, region="MX", publish_time=0, sort_type=0):
         self.video_dictionary = {}
@@ -38,7 +64,7 @@ class TikTok:
         for video in response_videos:
             video_id = video["video_id"]
             region = video["region"]
-            title = clean(video["title"], no_emoji=True)
+            title = self.remove_emojis(video["title"])
             origin_cover = video["origin_cover"]
             duration = video["duration"]
             play = video["play"]
@@ -75,13 +101,19 @@ class TikTok:
             print(e)
             os.remove(video_id_mp4)
 
-    def upload_next_video_gc(self):
-        self.number_video += 1
+    def increase_number_video(self):
+        self.number_video = self.total_number - len(self.video_dictionary)
         try:
             self.next_video_id = list(self.video_dictionary.keys())[0]
         except Exception as e:
+            self.next_video_id = None
+            print(e)
+
+    def upload_next_video_gc(self):
+        if self.next_video_id is not None:
+            self.upload_video_gc(self.video_dictionary[self.next_video_id]['play'], self.next_video_id)
+        else:
             return
-        self.upload_video_gc(self.video_dictionary[self.next_video_id]['play'], self.next_video_id)
 
     def get_next_dictionary(self):
         if self.next_video_id and len(self.video_dictionary) > 0:
@@ -89,10 +121,9 @@ class TikTok:
 
     def transcribe_next_video(self):
         self.transcribe_video(self.next_video_id)
-        print(self.video_dictionary)
 
     def delete_next_video(self):
-        if self.next_video_id and len(self.video_dictionary) > 0:
+        if self.next_video_id is not None and len(self.video_dictionary) > 0:
             self.video_dictionary.pop(self.next_video_id)
 
     def get_total_number_of_videos(self):
@@ -118,6 +149,22 @@ class TikTok:
 
     def get_video_dictionary(self):
         return self.video_dictionary
+
+    def reset(self):
+        self.next_video_id = None
+        self.number_video = 0
+        self.total_number = 0
+        self.to_process = 0
+        self.current_cursor = 0
+        self.video_dictionary = {}
+
+    def get_next_video_transcript(self):
+        if self.next_video_id is not None:
+            return self.video_dictionary[self.next_video_id]['transcript']
+
+    def get_next_video_title(self):
+        if self.next_video_id is not None:
+            return self.video_dictionary[self.next_video_id]['title']
 
 
 if __name__ == '__main__':

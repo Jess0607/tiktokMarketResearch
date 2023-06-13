@@ -39,16 +39,10 @@
     }
   </style>
   <script>
-      {% if length_dictionary > 1 %}
-            function navigate() {
-              window.location.href = 'uploading_video';  // Redirects user to the 'transcribing_video' page when transcribing is finished
-            }
-        {% else %}
-            function navigate() {
-              window.location.href = 'finished';  // Redirects user to the 'transcribing_video' page when transcribing is finished
-            }
-        {% endif %}
-    fetch('transcribe').then(navigate); // Initiating the transcribing process and then calls navigate() function, declared above
+      function navigate() {
+            window.location.href = 'getting_topics';  // Redirects user to the /map route when 'create_map' is finished
+        }
+        fetch('transcribe').then(navigate); // Performing 'create_map' and then calls navigate() function, declared above
   </script>
 </head>
 <body>

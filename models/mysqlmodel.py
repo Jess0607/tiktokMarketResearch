@@ -46,3 +46,14 @@ class Author(db.Model):
 
     def __repr__(self):
         return f"Author('{self.author_id}', '{self.unique_id}', '{self.avatar}') "
+
+
+class Topic(db.Model):
+    __tablename__ = 'topic'
+    topic_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    video_id = db.Column(db.BigInteger)
+    topic_name = db.Column(db.String(255))
+    source = db.Column(db.String(45))
+
+    def __repr__(self):
+        return f"Topic('{self.topic_id}', '{self.title}', '{self.description}', '{self.image_url}', '{self.video_id}') "
